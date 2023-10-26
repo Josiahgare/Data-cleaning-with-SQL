@@ -18,5 +18,5 @@ Three dataset were provided;
 - Missing data, inconsistent data, inaccurate data were resolved
 - Data exploration
 - Feature engineering
-- Creation of new table CustomerList from existing and clean data
+- Creation of new table **CustomerList** from existing and clean data
 - Exporting data as CSV file for future use
