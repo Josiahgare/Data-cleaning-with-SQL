@@ -1,11 +1,11 @@
 /*
-========================================
+==========================================================================
 Data Exploration of Customer Demographic
-========================================
+==========================================================================
 Script Purpose:
-	This script explores the Customer Demographic dataset, checks and replace nulls,
-	update columns, and transforms the data as well
-
+	This script explores the Customer Demographic dataset, checks and 
+	replace nulls, update columns, and transforms the data as well.
+==========================================================================
 */
 
 -- preview of our table
