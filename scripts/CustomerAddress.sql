@@ -1,11 +1,11 @@
 /*
-=====================================
+==========================================================================
 Data Exploration of Customer Address
-=====================================
+==========================================================================
 Script Purpose:
   This script explores the customer address dataset, checks for nulls and 
-  transforms the data as well
-
+  transforms the data as well.
+==========================================================================
 */
 
 -- preview of our table
