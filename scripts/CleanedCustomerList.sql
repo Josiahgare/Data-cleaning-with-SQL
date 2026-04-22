@@ -1,3 +1,12 @@
+/*
+=====================================
+Cleaned Customer List 
+=====================================
+Script Purpose:
+    This script creates a Cleaned Customer List by joining the cleaned data 
+    from the initial dataset provided at the start of project.
+
+*/
 
 -- creating new table
 SELECT 
