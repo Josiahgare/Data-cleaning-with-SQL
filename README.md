@@ -1,6 +1,8 @@
 # Data-cleaning-with-SQL
 Cleaning high quality bikes and cycling accessories data using Microsoft SQL Server
 
+---
+
 ## Project Overview
 **Aim:** The aim of the project is to clean the datasets and create a single dataset **CustomerList** to aid reporting and analytics.
 
@@ -8,11 +10,15 @@ Cleaning high quality bikes and cycling accessories data using Microsoft SQL Ser
 
 **Data source:** KPMG Virtual Internship with Forage
 
+---
+
 ### Dataset
 Three dataset were provided;
 - Customer address
 - Customer demographics
 - Transactions
+
+---
 
 ### Process
 - CSV files were loaded into SQL server
