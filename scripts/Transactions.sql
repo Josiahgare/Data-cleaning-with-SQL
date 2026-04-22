@@ -1,11 +1,11 @@
 /*
-=====================================
+==========================================================================
 Data Exploration of Transactions
-=====================================
+==========================================================================
 Script Purpose:
   	This script explores the customer transactions, checks for nulls, formats columns,
 	derive new columns, and transforms the data as well.
-
+==========================================================================
 */
 
 -- preview of our table
