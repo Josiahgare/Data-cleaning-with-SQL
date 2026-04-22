@@ -1,3 +1,13 @@
+/*
+=====================================
+Data Exploration of Transactions
+=====================================
+Script Purpose:
+  	This script explores the customer transactions, checks for nulls, formats columns,
+	derive new columns, and transforms the data as well.
+
+*/
+
 -- preview of our table
 SELECT *
 FROM Transactions;
@@ -95,7 +105,8 @@ SELECT COUNT(DISTINCT(product_id)) AS Total_num_product
 FROM Transactions;
 GO
 
-SELECT AVG(profit) AS Average_profit, 
+SELECT 
+	AVG(profit) AS Average_profit, 
 	MAX(profit) AS Maximum_profit, 
 	MIN(profit) AS Minimum_profit,
 	SUM(profit) AS Total_profit
