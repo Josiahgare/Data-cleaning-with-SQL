@@ -1,4 +1,23 @@
--- load silver layer
+/*
+==============================================================================================
+Stored Procedure: Load Silver Layer (Bronze --> Silver)
+==============================================================================================
+Script Purpose:
+    This Stored Procedure performs the ETL (Extract, Transform, Load) process to populate the
+    'silver' schema tables from the 'bronze' schema.
+    It performs the following;
+    - Truncates the silver tables
+    - Inserts transformed and clean data from Bronze into Silver tables
+
+Parameters:
+    None.
+    This Stored Procedure does not accept any parameters or return any values.
+
+Usage Example:
+    EXEC silver.load_silver;
+==============================================================================================
+*/
+
 CREATE OR ALTER PROCEDURE silver.load_silver AS
 BEGIN
     
@@ -100,6 +119,10 @@ BEGIN
 
         PRINT '>> Inserting table: silver.Transactions';
 
+		-- ===========================================================================
+		-- use CTE to clean broken, messy csv file before joining with union function 
+		-- ===========================================================================
+
         WITH trans_error AS (
         SELECT *
         FROM bronze.Transactions
@@ -165,7 +188,7 @@ BEGIN
                   )
         
         UNION ALL
-        
+			
         SELECT 
 	        transaction_id,
             product_id,
@@ -184,7 +207,7 @@ BEGIN
                         RIGHT(REPLACE(REPLACE(combined_value, '"', ''), '$', ''), 5)
                                     ) - 2, '1900-01-01') 
             AS DATE) AS product_first_sold_date
-        FROM error_combined;
+        FROM error_combined;	-- from CTE 
         SET @end_time = GETDATE();
 
         PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS VARCHAR) + 'seconds';
