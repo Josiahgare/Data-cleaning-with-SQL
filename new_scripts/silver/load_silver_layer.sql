@@ -99,6 +99,33 @@ BEGIN
         TRUNCATE TABLE silver.Transactions;
 
         PRINT '>> Inserting table: silver.Transactions';
+
+        WITH trans_error AS (
+        SELECT *
+        FROM bronze.Transactions
+        WHERE brand IS NOT NULL AND transaction_id NOT IN (2611, 2640) 
+            AND standard_cost NOT LIKE '$%[0-9].%' AND LEN(product_first_sold_date) != 5
+            )
+
+        , error_combined AS (
+        SELECT 
+	        transaction_id,
+            product_id,
+            customer_id,
+            transaction_date,
+            online_order,
+            order_status,
+            brand,
+            product_line,
+            product_class,
+            product_size,
+            list_price,
+	        CASE
+		        WHEN standard_cost LIKE ('"%') THEN standard_cost + product_first_sold_date
+		        ELSE standard_cost
+	        END AS combined_value
+        FROM trans_error)
+
         INSERT INTO silver.Transactions (
             transaction_id,
             product_id,
@@ -119,18 +146,45 @@ BEGIN
             transaction_id,
             product_id,
             customer_id,
-            TRY_CONVERT(DATE, transaction_date, 103) AS transaction_date,
-            online_order,
+            CONVERT(DATE, transaction_date, 103) AS transaction_date,
+            COALESCE(online_order, 'n/a'),
             order_status,
             brand,
             product_line,
             product_class,
             product_size,
-            TRY_CAST(list_price AS FLOAT) AS list_price,
-            TRY_CONVERT(FLOAT, RIGHT(standard_cost, LEN(standard_cost) -1)) AS standard_cost,
-            CAST(DATEADD(day, TRY_CONVERT(INT, product_first_sold_date) - 2, '1900-01-01') AS DATE) AS product_first_sold_date
+            CAST(list_price AS DECIMAL(10,2)) AS list_price,
+            CAST(REPLACE(standard_cost, '$', '') AS DECIMAL(10,2)) AS standard_cost,
+            CAST(DATEADD(day, CONVERT(INT, product_first_sold_date) - 2, '1900-01-01') AS DATE) AS product_first_sold_date
         FROM bronze.Transactions
-        WHERE brand IS NOT NULL AND transaction_id NOT IN (2611, 2640);
+        WHERE brand IS NOT NULL 
+              AND transaction_id NOT IN (2611, 2640)
+              AND (
+                    standard_cost LIKE '$%[0-9].%'
+                    AND LEN(product_first_sold_date) = 5
+                  )
+        
+        UNION ALL
+        
+        SELECT 
+	        transaction_id,
+            product_id,
+            customer_id,
+            CONVERT(DATE, transaction_date, 103) AS transaction_date,
+            COALESCE(online_order, 'n/a'),
+            order_status,
+            brand,
+            product_line,
+            product_class,
+            product_size,
+            CAST(list_price AS DECIMAL(10,2)) AS list_price,
+	        CAST(LEFT(REPLACE(REPLACE(combined_value, '"', ''), '$', ''), 7) AS DECIMAL(10,2)) AS standard_cost,
+            CAST(DATEADD
+                        (day, CONVERT(INT, 
+                        RIGHT(REPLACE(REPLACE(combined_value, '"', ''), '$', ''), 5)
+                                    ) - 2, '1900-01-01') 
+            AS DATE) AS product_first_sold_date
+        FROM error_combined;
         SET @end_time = GETDATE();
 
         PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS VARCHAR) + 'seconds';
@@ -157,4 +211,9 @@ GO
 EXEC silver.load_silver;
 GO
 
-USE BikesDB;
+SELECT * FROM silver.CustomerAddress;
+GO
+SELECT * FROM silver.CustomerDemographic;
+GO
+SELECT * FROM silver.Transactions;
+GO

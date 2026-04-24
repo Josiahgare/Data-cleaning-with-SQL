@@ -16,8 +16,7 @@ CREATE TABLE silver.CustomerAddress (
 GO
 
 
-IF OBJECT_ID ('silver.CustomerDemographic', 'U') IS NOT NULL
-    DROP TABLE silver.CustomerDemographic;
+DROP TABLE IF EXISTS silver.CustomerDemographic;
 GO
 
 CREATE TABLE silver.CustomerDemographic (
@@ -37,8 +36,7 @@ CREATE TABLE silver.CustomerDemographic (
 GO
 
 
-IF OBJECT_ID ('silver.Transactions', 'U') IS NOT NULL
-    DROP TABLE silver.Transactions;
+DROP TABLE IF EXISTS silver.Transactions;
 GO
 
 CREATE TABLE silver.Transactions (
@@ -52,11 +50,15 @@ CREATE TABLE silver.Transactions (
     product_line            NVARCHAR(50),
     product_class           NVARCHAR(50),
     product_size            NVARCHAR(50),
-    list_price              FLOAT,
-    standard_cost           FLOAT,
+    list_price              DECIMAL(10,2),
+    standard_cost           DECIMAL(10,2),
     product_first_sold_date DATE,
     db_create_date          DATETIME2 DEFAULT GETDATE()
 );
 GO
 
+USE BikesDB;
 
+SELECT * FROM silver.CustomerAddress;
+SELECT * FROM silver.CustomerDemographic;
+SELECT * FROM silver.Transactions;
