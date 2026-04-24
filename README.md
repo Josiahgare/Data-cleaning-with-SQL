@@ -19,6 +19,15 @@ This project involves;
 
 ---
 
+## Data Engineering Project Overview (new)
+
+This project involves
+1.  **Data Architecture:** Designing a Modern Data Warehouse Using Medallion Architecture **Bronze**, **Silver**, and **Gold** layers.
+2.  **ETL Pipelines:** Extracting, transforming,and loading data from the source systems into the warehouse.
+3.  **Data Modeling:** Developing fact and dimension tables optimized for analytical queries.
+
+---
+
 ### Dataset
 
 Three dataset were provided;
@@ -33,7 +42,6 @@ Three dataset were provided;
 - Missing data, inconsistent data, inaccurate data were resolved
 - Data exploration
 - Feature engineering
-- Creation of new table **CustomerList** from existing and clean data
 - Exporting data as CSV file for future use
 
 ---
